@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import { Chart, registerables } from 'chart.js';
 import axios from 'axios';
 import './IntensityChart.css'; // Import the CSS file if needed
+import Slider from './Slider';
 
 Chart.register(...registerables);
 
@@ -30,8 +31,19 @@ const IntensityChart = () => {
     fetchData();
   }, []);
 
+
+
+  function changeValueFunction(arr){
+    setTesting(arr)
+  }
+
+
+ 
+
+  const[testing,setTesting]=useState(year); 
+
   const newData = {
-    labels: year,
+    labels: testing,
     datasets: [{
       label: 'Intensity',
       data: intensity,
@@ -119,11 +131,13 @@ const IntensityChart = () => {
         }
       };
     }
-  }, [chartType, year, intensity]);
+  }, [chartType, year, intensity,testing]);
 
   const handleChartTypeChange = (event) => {
     setChartType(event.target.value);
   };
+
+ 
 
   return (
     <div className="container">
@@ -140,7 +154,21 @@ const IntensityChart = () => {
           <option value="polarArea">PolarArea</option>
           <option value="radar">Radar</option>
         </select>
+        <div>
+        ,
+      {
+
+        year?.length>0?
+        (<Slider
+         year={year} setYear={setYear}
+         changeValueFunction={changeValueFunction}
+
+        />):""
+
+      }
+        </div>
       </div>
+      
     </div>
   );
 };

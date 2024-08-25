@@ -90,6 +90,7 @@ const SalesChart = () => {
           <option value="radar">Radar</option>
         </select>
       </div>
+      
     </div>
   );
 };
