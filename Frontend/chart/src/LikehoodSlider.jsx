@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import './Slider.css'; // Import the CSS file
 
-const Slider = ({ year, setYear,changeValueFunction}) => {
+const LikehoodSlider = ({ year, setYear,changeValueFunction}) => {
   const [value, setValue] = useState(year?.[year.length-1]);
 
   const handleChange = (event) => {
@@ -64,4 +64,4 @@ const Slider = ({ year, setYear,changeValueFunction}) => {
   );
 };
 
-export default Slider;
+export default LikehoodSlider;

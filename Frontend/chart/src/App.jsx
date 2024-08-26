@@ -10,18 +10,22 @@ import DataVisualization from './DataVisualization'
 import DataFlow from './DataFlow'
 import SalesChart from './SalesChart'
 import IntensityChart from './IntensityChart'
+import Header from './Header'
+import LikehoodChart from './LikehoodChart'
+import UpdatedChart from './UpdatedChart'
+import YearIntensityChart from './YearIntensityChart'
+import TopicRelevance from './TopicRelevance'
+import RegionLikelihood from './RegionLikelihood'
 
 
 function App() {
-  const [count, setCount] = useState(0)
 
-  // const [data, setData] = useState(() => d3.ticks(-2, 2, 200).map(Math.sin));
+  const[titles,setTitles]=useState();
+ 
+function handleTitle (text){
+  console.log(text)
 
-  // function onMouseMove(event) {
-  //   const [x, y] = d3.pointer(event);
-  //   setData(data.slice(-200).concat(Math.atan2(x, y)));
-  // }
-
+}
 
 
 
@@ -29,8 +33,25 @@ function App() {
     <>
      {/* <DataFlow/> */}
      {/* <SalesChart/> */}
-     <IntensityChart/>
-   
+     
+     <div className='h-screen  mx-auto'>
+
+
+     {/* <Header handleTitle={handleTitle}/> */}
+
+     
+     <UpdatedChart/>
+    
+     {/* <TopicRelevance/> */}
+
+     {/* <RegionLikelihood/> */}
+
+
+
+
+
+     </div>
+    
        
        
     </>
