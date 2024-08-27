@@ -16,6 +16,8 @@ import UpdatedChart from './UpdatedChart'
 import YearIntensityChart from './YearIntensityChart'
 import TopicRelevance from './TopicRelevance'
 import RegionLikelihood from './RegionLikelihood'
+import Filter from './Filter'
+import CountryData from './CountryData'
 
 
 function App() {
@@ -33,26 +35,44 @@ function handleTitle (text){
     <>
      {/* <DataFlow/> */}
      {/* <SalesChart/> */}
+     <main className='bg-[#f8f7fa]'>
      
-     <div className='h-screen  mx-auto'>
+     <div className='h-full w-full  mx-auto'>
 
 
-     {/* <Header handleTitle={handleTitle}/> */}
+     <Header handleTitle={handleTitle}/>
+     </div>
 
-     
-     <UpdatedChart/>
-    
-     {/* <TopicRelevance/> */}
+    <div className='m-10 h-full shadow-md hover:shadow-lg rounded'>
+     <CountryData/>
+     </div>
 
-     {/* <RegionLikelihood/> */}
-
-
+<div className='m-10 flex h-full justify-around'>
 
 
+    <div className='w-5/12 h-full rounded-md hover:shadow-lg'>
+       <UpdatedChart/>
+     </div>
+     <div className='w-5/12 h-full rounded-md hover:shadow-lg'>
+       <RegionLikelihood/>
+     </div>
+</div>
 
+
+
+<div className='m-10 h-full shadow-md hover:shadow-lg rounded'>
+
+     <TopicRelevance/>
      </div>
     
-       
+
+
+
+
+
+     
+    
+     </main>
        
     </>
   )

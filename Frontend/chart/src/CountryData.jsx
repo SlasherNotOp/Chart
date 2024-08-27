@@ -1,13 +1,13 @@
 import React, { useState, useEffect, useRef } from 'react';
 import axios from 'axios';
-import { Chart, registerables, BarElement, CategoryScale, LinearScale, Title, Tooltip, Legend } from 'chart.js';
+import { Chart, registerables, BarElement, LineElement, PointElement, CategoryScale, LinearScale, Title, Tooltip, Legend } from 'chart.js';
 
-Chart.register(...registerables, BarElement, CategoryScale, LinearScale, Title, Tooltip, Legend);
+Chart.register(...registerables, BarElement, LineElement, PointElement, CategoryScale, LinearScale, Title, Tooltip, Legend);
 
-const UpdatedChart = () => {
+const CountryData = () => {
   const chartRef = useRef(null);
   const [chartInstance, setChartInstance] = useState(null);
-  const [chartType, setChartType] = useState('pie');
+  const [chartType, setChartType] = useState('line');
   const [chartData, setChartData] = useState({ labels: [], datasets: [] });
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -15,49 +15,39 @@ const UpdatedChart = () => {
   useEffect(() => {
     const fetchChartData = async () => {
       try {
-        const response = await axios.get('http://localhost:3000/year-vs-intensity');
-        const labels = response.data.map(item => item.year);
-        const data = response.data.map(item => item.intensity);
+        const response = await axios.get('http://localhost:3000/country-data');
+        const labels = response.data.map(item => item._id); // Country
+        const intensityData = response.data.map(item => item.averageIntensity);
+        const likelihoodData = response.data.map(item => item.averageLikelihood);
+        const relevanceData = response.data.map(item => item.averageRelevance);
 
         setChartData({
           labels,
           datasets: [
             {
               label: 'Intensity',
-              data,
-              backgroundColor: [
-                'rgba(255, 99, 132, 0.2)',
-                'rgba(255, 159, 64, 0.2)',
-                'rgba(255, 205, 86, 0.2)',
-                'rgba(75, 192, 192, 0.2)',
-                'rgba(54, 162, 235, 0.2)',
-                'rgba(153, 102, 255, 0.2)',
-                'rgba(201, 203, 207, 0.2)',
-                'rgba(255, 99, 71, 0.2)',
-                'rgba(255, 140, 0, 0.2)',
-                'rgba(60, 179, 113, 0.2)',
-                'rgba(0, 191, 255, 0.2)',
-                'rgba(255, 105, 180, 0.2)',
-                'rgba(238, 130, 238, 0.2)',
-                'rgba(255, 20, 147, 0.2)'
-          ],
-              borderColor: [
-                'rgba(255, 99, 132, 1)',
-          'rgba(255, 159, 64, 1)',
-          'rgba(255, 205, 86, 1)',
-          'rgba(75, 192, 192, 1)',
-          'rgba(54, 162, 235, 1)',
-          'rgba(153, 102, 255, 1)',
-          'rgba(201, 203, 207, 1)',
-          'rgba(255, 99, 71, 1)',
-          'rgba(255, 140, 0, 1)',
-          'rgba(60, 179, 113, 1)',
-          'rgba(0, 191, 255, 1)',
-          'rgba(255, 105, 180, 1)',
-          'rgba(238, 130, 238, 1)',
-          'rgba(255, 20, 147, 1)'
-              ],
-              borderWidth: 1,
+              data: intensityData,
+              backgroundColor: 'rgba(255, 99, 132, 0.2)',
+              borderColor: 'rgba(255, 99, 132, 1)',
+              borderWidth: 2,
+              pointRadius: 0, // Adjust size of dots here
+            },
+            {
+              label: 'Likelihood',
+              data: likelihoodData,
+              backgroundColor: 'rgba(54, 162, 235, 0.2)',
+              borderColor: 'rgba(54, 162, 235, 1)',
+              borderWidth: 2,
+              pointRadius: 0, // Adjust size of dots here
+              
+            },
+            {
+              label: 'Relevance',
+              data: relevanceData,
+              backgroundColor: 'rgba(75, 192, 192, 0.2)',
+              borderColor: 'rgba(75, 192, 192, 1)',
+              borderWidth: 2,
+              pointRadius: 0, // Adjust size of dots here
             },
           ],
         });
@@ -87,7 +77,7 @@ const UpdatedChart = () => {
           plugins: {
             title: {
               display: true,
-              text: 'Year vs. Intensity',
+              text: 'Country Data: Intensity, Likelihood, and Relevance',
               font: { size: 18 },
             },
             tooltip: {
@@ -99,29 +89,29 @@ const UpdatedChart = () => {
               position: 'top',
             },
           },
-          // scales: {
-          //   x: {
-          //     title: {
-          //       display: true,
-          //       text: 'Year',
-          //       font: { size: 16 },
-          //     },
-          //     grid: {
-          //       display: false,
-          //     },
-          //   },
-          //   y: {
-          //     title: {
-          //       display: true,
-          //       text: 'Intensity',
-          //       font: { size: 16 },
-          //     },
-          //     beginAtZero: true,
-          //     grid: {
-          //       drawBorder: false,
-          //     },
-          //   },
-          // },
+          scales: {
+            x: {
+              title: {
+                display: true,
+                text: 'Country',
+                font: { size: 16 },
+              },
+              grid: {
+                display: false,
+              },
+            },
+            y: {
+              title: {
+                display: true,
+                text: 'Value',
+                font: { size: 16 },
+              },
+              beginAtZero: true,
+              grid: {
+                drawBorder: false,
+              },
+            },
+          },
         },
       });
 
@@ -142,7 +132,7 @@ const UpdatedChart = () => {
   }
 
   return (
-    <div className="w-full h-[500px] relative p-4 shadow-md">
+    <div className="w-full h-[500px] relative p-4">
       <canvas ref={chartRef} className="w-full h-full" />
       {/* <div className="my-4 flex flex-col items-center">
         <label htmlFor="chartType" className="mb-2 font-bold text-gray-700">Select Chart Type:</label>
@@ -164,4 +154,4 @@ const UpdatedChart = () => {
   );
 };
 
-export default UpdatedChart;
+export default CountryData;

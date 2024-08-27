@@ -150,9 +150,9 @@ const RegionLikelihood = () => {
   }
 
   return (
-    <div className="w-full h-[500px] relative p-4">
+    <div className="w-full h-[500px] relative p-4 shadow-md">
       <canvas ref={chartRef} className="w-full h-full" />
-      <div className="my-4 flex flex-col items-center">
+      {/* <div className="my-4 flex flex-col items-center">
         <label htmlFor="chartType" className="mb-2 font-bold text-gray-700">Select Chart Type:</label>
         <select
           id="chartType"
@@ -167,7 +167,7 @@ const RegionLikelihood = () => {
           <option value="doughnut">Doughnut</option>
           <option value="polarArea">Polar Area</option>
         </select>
-      </div>
+      </div> */}
     </div>
   );
 };

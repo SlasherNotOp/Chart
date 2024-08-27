@@ -7,7 +7,7 @@ Chart.register(...registerables, BarElement, CategoryScale, LinearScale, Title, 
 const TopicRelevance = () => {
   const chartRef = useRef(null);
   const [chartInstance, setChartInstance] = useState(null);
-  const [chartType, setChartType] = useState('polarArea');
+  const [chartType, setChartType] = useState('bar');
   const [chartData, setChartData] = useState({ labels: [], datasets: [] });
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
