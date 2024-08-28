@@ -9,8 +9,11 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
+const ConnectString="mongodb+srv://mohitsasane76:mohit@cluster0.rac2w.mongodb.net/";
+const he= "mongodb+srv://mohitsasane76:mohit@cluster0.rac2w.mongodb.net/"
 
-mongoose.connect('mongodb://localhost:27017/Coffee')
+
+mongoose.connect(he)
 .then(() => console.log('Connected to MongoDB'))
 .catch(err => console.error('Failed to connect to MongoDB', err));
 
@@ -111,12 +114,12 @@ app.get('/region-likelihood', async (req, res) => {
 
 //data is based on topics and relevance
 app.get('/topics-vs-relevance', async (req, res) => {
-  const { endYear, topic, sector, region, pestle, source, swot } = req.query;
+  const { end_year, topic, sector, region, pestle, source, swot } = req.query;
 
   try {
     // Build filter criteria based on query parameters
     const filterCriteria = {};
-    if (endYear) filterCriteria.end_year = endYear;
+    if (end_year) filterCriteria.end_year = end_year;
     if (topic) filterCriteria.topic = topic;
     if (sector) filterCriteria.sector = sector;
     if (region) filterCriteria.region = region;
