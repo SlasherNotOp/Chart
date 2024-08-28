@@ -81,33 +81,6 @@ app.get('/year-vs-intensity', async (req, res) => {
 
 /////////////////////////////////////////////////////////////
 
-//data is based on topics and relevance
-app.get('/topics-vs-relevance', async (req, res) => {
-  try {
-    // Aggregate data by topic and calculate average relevance
-    const data = await chartData.aggregate([
-      {
-        $group: {
-          _id: "$topic",
-          averageRelevance: { $avg: "$relevance" }
-        }
-      },
-      {
-        $sort: { averageRelevance: -1 } // Optional: Sort by relevance
-      }
-    ]);
-
-    // Send the data in the desired format
-    res.json(data);
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ message: 'Internal Server Error' });
-  }
-});
-
-
-
-////////////////////////////////////////////////////////////////
 
 
 //data bases on region and likelihood
@@ -133,9 +106,47 @@ app.get('/region-likelihood', async (req, res) => {
   }
 });
 
+////////////////////////////////////////////////////////////////
 
 
+//data is based on topics and relevance
+app.get('/topics-vs-relevance', async (req, res) => {
+  const { endYear, topic, sector, region, pestle, source, swot } = req.query;
 
+  try {
+    // Build filter criteria based on query parameters
+    const filterCriteria = {};
+    if (endYear) filterCriteria.end_year = endYear;
+    if (topic) filterCriteria.topic = topic;
+    if (sector) filterCriteria.sector = sector;
+    if (region) filterCriteria.region = region;
+    if (pestle) filterCriteria.pestle = pestle;
+    if (source) filterCriteria.source = source;
+    if (swot) filterCriteria.swot = swot;
+
+    // Aggregate data by topic and calculate average relevance with filters applied
+    const data = await chartData.aggregate([
+      {
+        $match: filterCriteria
+      },
+      {
+        $group: {
+          _id: "$topic",
+          averageRelevance: { $avg: "$relevance" }
+        }
+      },
+      {
+        $sort: { averageRelevance: -1 } // Optional: Sort by relevance
+      }
+    ]);
+
+    // Send the data in the desired format
+    res.json(data);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Internal Server Error' });
+  }
+});
 
 
 
@@ -182,6 +193,85 @@ app.get('/region-likelihood', async (req, res) => {
       res.status(500).json({ error: 'Failed to fetch data' });
     }
   });
+
+
+
+  //////////////////////////////////////////////////////////
+
+  //singleData
+
+
+  app.get('/endYears', async (req, res) => {
+    try {
+      // Fetch distinct end_year values from the collection
+      const uniqueEndYears = await chartData.distinct('end_year', { end_year: { $ne: "" } });
+      
+      // Send the unique end years in the response
+      res.json(uniqueEndYears);
+    } catch (error) {
+      console.error('Error fetching unique end years:', error);
+      res.status(500).json({ message: 'Internal Server Error' });
+    }
+  });
+
+
+  app.get('/sector', async (req, res) => {
+    try {
+      // Fetch distinct end_year values from the collection
+      const uniqueEndYears = await chartData.distinct('sector', { sector: { $ne: "" } });
+      
+      // Send the unique end years in the response
+      res.json(uniqueEndYears);
+    } catch (error) {
+      console.error('Error fetching unique end years:', error);
+      res.status(500).json({ message: 'Internal Server Error' });
+    }
+  });
+
+
+  app.get('/region', async (req, res) => {
+    try {
+      // Fetch distinct end_year values from the collection
+      const uniqueEndYears = await chartData.distinct('region', { region: { $ne: "" } });
+      
+      // Send the unique end years in the response
+      res.json(uniqueEndYears);
+    } catch (error) {
+      console.error('Error fetching unique end years:', error);
+      res.status(500).json({ message: 'Internal Server Error' });
+    }
+  });
+
+  app.get('/pestle', async (req, res) => {
+    try {
+      // Fetch distinct end_year values from the collection
+      const uniqueEndYears = await chartData.distinct('pestle', { pestle: { $ne: "" } });
+      
+      // Send the unique end years in the response
+      res.json(uniqueEndYears);
+    } catch (error) {
+      console.error('Error fetching unique end years:', error);
+      res.status(500).json({ message: 'Internal Server Error' });
+    }
+  });
+
+  app.get('/source', async (req, res) => {
+    try {
+      // Fetch distinct end_year values from the collection
+      const uniqueEndYears = await chartData.distinct('source', { source: { $ne: "" } });
+      
+      // Send the unique end years in the response
+      res.json(uniqueEndYears);
+    } catch (error) {
+      console.error('Error fetching unique end years:', error);
+      res.status(500).json({ message: 'Internal Server Error' });
+    }
+  });
+
+
+
+
+
 
 
   

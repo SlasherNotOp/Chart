@@ -60,7 +60,7 @@ function handleTitle (text){
 
 
 
-<div className='m-10 h-full shadow-md hover:shadow-lg rounded'>
+<div className='m-10 h-full shadow-md hover:shadow-lg rounded hover:rounded-lg'>
 
      <TopicRelevance/>
      </div>

@@ -12,10 +12,47 @@ const TopicRelevance = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
+  const [endYears,setEndYears]=useState([]);
+  const[endYear,setEndYear]=useState('');
+
+  const [sectors, setSectors]=useState([]);
+  const [sector, setSector]=useState('');
+
+  const [regions,setRegions]=useState([]);
+  const [region,setRegion]=useState('');
+
+
+  const [pestles, setPestles]=useState([]);
+  const [pestle, setPestle]=useState('');
+
+
+  const [sources, setSources]=useState([]);
+  const [source, setSource]=useState('');
+
   useEffect(() => {
     const fetchChartData = async () => {
       try {
-        const response = await axios.get('http://localhost:3000/topics-vs-relevance');
+        const response = await axios.get('http://localhost:3000/topics-vs-relevance',{
+          endYear,sector,region,pestle,source
+        });
+        const responseEndYear=await axios.get('http://localhost:3000/endYears');
+        const responseSector =await axios.get('http://localhost:3000/sector');
+        const responseRegion=await axios.get('http://localhost:3000/region')
+        const responsePest=await axios.get('http://localhost:3000/pestle')
+        const responseSource=await axios.get('http://localhost:3000/source')
+
+
+
+
+
+        setEndYears(responseEndYear.data)     
+        setSectors(responseSector.data)
+        setRegions(responseRegion.data)
+        setPestles(responsePest.data);
+        setSources(responseSource.data);
+
+
+
         const labels = response.data.map(item => item._id); // Topic
         const data = response.data.map(item => item.averageRelevance); // Average Relevance
 
@@ -129,9 +166,12 @@ const TopicRelevance = () => {
     }
   }, [chartData, chartType, loading, error]);
 
-  const handleChartTypeChange = (e) => {
-    setChartType(e.target.value);
+  const handleOption = (e,fun) => {
+    fun(e.target.value);
+    
   };
+  
+  
 
   if (loading) {
     return <div className="text-center text-gray-500">Loading chart...</div>;
@@ -144,7 +184,133 @@ const TopicRelevance = () => {
   return (
     <div className="w-full h-[500px] relative p-4">
       <canvas ref={chartRef} className="w-full h-full" />
-      <div className="my-4 flex flex-col items-center">
+      <div className='h-44 flex justify-evenly  items-center w-full'>
+        
+        <div className='flex flex-col justify-center items-center'>
+        <span>end year</span>
+        <select 
+        id="endYear"
+          value={endYear}
+          onChange={(e)=>handleOption(e,setEndYear)}
+
+
+        className='endYear m-2 p-2 border w-40 border-gray-300 rounded shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500'>
+          <option>all</option>
+          {
+            
+            endYears.map((year)=>{
+              return(
+                <option>{year}</option>
+              )
+
+            })
+          }
+        </select>
+        </div>
+
+
+
+        <div className='flex flex-col justify-center items-center'>
+        <span>sector</span> 
+        <select 
+        id="sector"
+          value={sector}
+          onChange={(e)=>handleOption(e,setSector)}
+        
+        
+        className='endYear m-2 p-2 border w-40 border-gray-300 rounded shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500'>
+          <option>all</option>
+          {
+            sectors.map((data)=>{
+              return(
+                <option>{data}</option>
+              )
+              
+            })
+          }
+        </select>
+        </div>
+
+
+
+
+       <div className='flex flex-col justify-center items-center'>
+        <span>region</span>
+        <select 
+         id="region"
+          value={region}
+          onChange={(e)=>handleOption(e,setRegion)}
+
+        
+        
+        className='endYear m-2 p-2 border w-40 border-gray-300 rounded shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500'>
+         <option>all</option>
+          {
+            regions.map((data)=>{
+              return(
+                <option>{data}</option>
+              )
+            })
+            
+          }
+        </select>
+        </div>
+
+
+
+        <div className='flex flex-col justify-center items-center'>
+        <span>pestle</span>
+        <select 
+        id="pestle"
+          value={pestle}
+          onChange={(e)=>handleOption(e,setPestle)}
+        
+        
+        
+        className='endYear m-2 p-2 border w-40 border-gray-300 rounded shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500'>
+         <option>all</option>
+          {
+            pestles.map((data)=>{
+              return<option>{data}</option>
+            })
+          }
+        </select>
+        </div>
+
+
+
+
+        <div className='flex flex-col justify-center items-center'>
+        <span>source</span>
+        <select
+
+          id="pestle"
+          value={source}
+          onChange={(e)=>handleOption(e,setSource)}
+
+        
+        
+        
+         className='endYear m-2 p-2 border border-gray-300 rounded shadow-sm focus:outline-none w-40 focus:ring-2 focus:ring-blue-500'>
+          <option>all</option>
+          {
+            sources.map((data)=>{
+              return<option>{data}</option>
+            })
+          }
+        </select>
+        </div>
+
+
+      </div>
+
+
+
+
+
+
+
+      {/* <div className="my-4 flex flex-col items-center">
         <label htmlFor="chartType" className="mb-2 font-bold text-gray-700">Select Chart Type:</label>
         <select
           id="chartType"
@@ -159,7 +325,8 @@ const TopicRelevance = () => {
           <option value="doughnut">Doughnut</option>
           <option value="polarArea">Polar Area</option>
         </select>
-      </div>
+        
+      </div> */}
     </div>
   );
 };
